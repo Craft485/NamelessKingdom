@@ -6,5 +6,5 @@
         "module": "commonJS"
     },
     "include": ["../node_modules/discord.js/typings/index.d.ts"],
-    "files": ["Help.ts"]
+    "files": ["Help.ts", "Start.ts"]
 }
