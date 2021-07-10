@@ -1,0 +1,5 @@
+node_modules
+t.json
+logs
+*.log
+assets/x.ts

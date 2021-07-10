@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "declaration": true,
+        "outDir": "../commands",
+        "moduleResolution": "node"
+    },
+    "include": ["../node_modules/discord.js/typings/index.d.ts"],
+    "exclude": ["x.ts"],
+    "files": ["Help.ts"]
+}
