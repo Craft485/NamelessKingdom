@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS `users`(
+    `id` BIGINT(255) NOT NULL PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `level` BIGINT(255) DEFAULT 0 NOT NULL,
+    `exp` BIGINT DEFAULT 0 NOT NULL,
+    `equippedItem` VARCHAR(255) DEFAULT NULL,
+    `location` VARCHAR(255) DEFAULT 'Knossos'
+);
+
+CREATE TABLE IF NOT EXISTS `inventory`(
+    `id` BIGINT(255) NOT NULL,
+    `item_id` BIGINT(255) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `quantity` BIGINT(255) NOT NULL,
+    `mods` VARCHAR(255) DEFAULT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `tablets` (
+    `id` BIGINT(255) NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `user_name` VARCHAR(255) NOT NULL,
+    `location` VARCHAR(255) NOT NULL,
+    `dateFound` DATE NOT NULL DEFAULT SYSDATE()
+);
