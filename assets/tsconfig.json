@@ -1,11 +1,10 @@
 {
     "compilerOptions": {
-        "target": "esnext",
-        "declaration": true,
+        "target": "es6",
         "outDir": "../commands",
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "module": "commonJS"
     },
     "include": ["../node_modules/discord.js/typings/index.d.ts"],
-    "exclude": ["x.ts"],
     "files": ["Help.ts"]
 }

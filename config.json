@@ -1,3 +1,8 @@
 {
-    "prefix": "-"
+    "prefix": "-",
+    "colors": {
+        "cyan": "#00FFFF",
+        "green": "#50C878",
+        "red": "#880808"
+    }
 }
