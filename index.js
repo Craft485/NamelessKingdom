@@ -45,7 +45,7 @@ client.on('message', (msg) => {
     } catch (err) {
         console.error(`ERR: ${err}`.red)
         msg.channel.send('An error occured while trying to execute that command, this event has been logged')
-        fs.writeFile('../logs/ERR.log', `\n\n${err}`, { flag: 'a' })
+        fs.writeFileSync('../logs/ERR.log', `\n\n${err}`, { flag: 'a' })
     }
 })
 
