@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require('fs');
+const { itemList } = require('./utils/Item');
 const config = require('../config.json');
 const mysql = require('mysql');
 const con = mysql.createConnection({
@@ -26,7 +27,7 @@ module.exports = {
             }
             // User is new, add to db
             if (!data || !data.length) {
-                con.query('INSERT INTO users (id, name) VALUES(?, ?)', [id, msg.author.username], (err) => {
+                con.query('INSERT INTO users (id, name, attack, equippedItem) VALUES(?, ?, ?, \'stick\')', [id, msg.author.username, itemList.stick.attack], (err) => {
                     if (err) {
                         fs.writeFileSync('../logs/ERR.log', `\n\n${err}`, { flags: "a" });
                         console.error('Error adding new user\n', err);
