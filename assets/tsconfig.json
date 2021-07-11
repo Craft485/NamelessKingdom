@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "es2020",
         "outDir": "../commands",
         "moduleResolution": "node",
         "module": "commonJS"
     },
-    "include": ["../node_modules/discord.js/typings/index.d.ts"],
-    "files": ["Help.ts", "Start.ts"]
+    "include": ["../node_modules/discord.js/typings/index.d.ts", "../node_modules/@types/node/fs.d.ts"],
+    "files": ["Help.ts", "Start.ts", "Location.ts", "utils\\Location.ts", "utils\\Enemy.ts", "utils\\Item.ts"]
 }
