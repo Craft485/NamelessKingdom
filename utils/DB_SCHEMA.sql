@@ -2,6 +2,9 @@ CREATE TABLE IF NOT EXISTS `users`(
     `id` BIGINT(255) NOT NULL PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
     `level` BIGINT(255) DEFAULT 0 NOT NULL,
+    `currentHealth` BIGINT(255) DEFAULT 20 NOT NULL,
+    `maxHealth` BIGINT(255) DEFAULT 20 NOT NULL,
+    `attack` BIGINT(255) DEFAULT NULL,
     `exp` BIGINT DEFAULT 0 NOT NULL,
     `equippedItem` VARCHAR(255) DEFAULT NULL,
     `location` VARCHAR(255) DEFAULT 'Knossos'
