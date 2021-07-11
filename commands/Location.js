@@ -33,9 +33,11 @@ module.exports = {
                 const arg = args[0];
                 if (arg?.toLowerCase() === '-m' || arg?.toLowerCase() === '-c') {
                     // Move/change to a new location(next arg is location name)
+                    locationList[userData[0].location].travel(msg, args);
                 }
                 else if (arg?.toLowerCase() === '-i' || !arg) {
                     // Show info on location
+                    locationList[userData[0].location].info(msg);
                 }
                 else if (arg?.toLowerCase() === '-f') {
                     // Fight at the current location

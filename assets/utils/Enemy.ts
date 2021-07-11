@@ -77,10 +77,10 @@ class Enemy {
             const response = new Discord.MessageEmbed()
                 .setColor(config.colors.red)
                 .addField('Battle Info', "```diff\n" + 
-                `-${msg.author.username} took ${enemy.attack} damage\n` +
-                `-${enemy.name} took ${player.attack} damage\n\n` +
-                `+${msg.author.username} has ${player.health} health left\n` +
-                `+${enemy.name} has ${enemy.health} health left\n` + 
+                `- ${msg.author.username} took ${enemy.attack} damage\n` +
+                `- ${enemy.name} took ${player.attack} damage\n\n` +
+                `+ ${msg.author.username} has ${player.health} health left\n` +
+                `+ ${enemy.name} has ${enemy.health} health left\n` + 
                 "```")
             
             if (player.health <= 0 || enemy.health <= 0) {
@@ -103,6 +103,8 @@ class Enemy {
                     }())}`
                 }`)
                 
+                /** @todo: Add new items to inventory */
+                
                 con.query('UPDATE users SET currentHealth = ? WHERE id = ?;', [player.health <= 0 ? 1 : player.health, id], (err: Error) => {
                     if (err) {
                         fs.writeFileSync('../../logs/ERR.log', `\n\n${err}`, { flags: "a" })
@@ -110,8 +112,6 @@ class Enemy {
                         return msg.reply('an error occured')
                     }        
                 })
-
-                /** @todo: Add new items to inventory */
 
                 currentBattles.delete(parseInt(id))
 
