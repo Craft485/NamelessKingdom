@@ -72,13 +72,14 @@ class Location {
             }
 
             if (userData?.length > 0) {
-                const destination = args[1]
+                const destination = args[1] || args[0]
                 // Is the destination valid?
-                const a = Object.values(this.neighbors).find(d => d?.toLowerCase() === destination.toLowerCase())
-                const b = Object.keys(this.neighbors).find(d => d?.toLowerCase() === destination.toLowerCase())
+                const a = Object.values(this.neighbors).find(d => d?.toLowerCase() === destination?.toLowerCase())
+                const b = Object.keys(this.neighbors).find(d => d?.toLowerCase() === destination?.toLowerCase())
                 // Tile casing, ensure that the first letter is capital and the rest are lower case
-                const tileCased = destination.charAt(0).toUpperCase() + destination.substr(1).toLowerCase()
+                const tileCased = destination?.charAt(0)?.toUpperCase() + destination?.substr(1)?.toLowerCase()
                 const finalDestination = a ? tileCased : b ? this.neighbors[tileCased] : null
+                
                 if (finalDestination) {
                     con.query('UPDATE users SET location = ? WHERE id = ?;', [finalDestination, id], (err: Error) => {
                         if (err) {
