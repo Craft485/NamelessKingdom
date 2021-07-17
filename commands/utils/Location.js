@@ -62,11 +62,6 @@ class Location {
                 // Tile casing, ensure that the first letter is capital and the rest are lower case
                 const tileCased = destination?.charAt(0)?.toUpperCase() + destination?.substr(1)?.toLowerCase();
                 const finalDestination = a ? tileCased : b ? this.neighbors[tileCased] : null;
-                console.log(a);
-                console.log(b);
-                console.log(finalDestination);
-                console.log(destination);
-                console.log(args);
                 if (finalDestination) {
                     con.query('UPDATE users SET location = ? WHERE id = ?;', [finalDestination, id], (err) => {
                         if (err) {

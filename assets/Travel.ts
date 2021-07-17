@@ -27,12 +27,6 @@ module.exports = {
             }
 
             userData?.length > 0 ? locationList[userData[0].location].travel(msg, args) : msg.reply(`you don't appear in the database. Have you used ${config.prefix}start yet?`)
-
-            // if (userData?.length > 0) {
-            //     locationList[userData[0].location].travel(msg, args)
-            // } else {
-            //     msg.reply(`you don't appear in the database. Have you used ${config.prefix}start yet?`)
-            // }
         })
     }
 }

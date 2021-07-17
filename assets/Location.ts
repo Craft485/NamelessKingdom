@@ -15,7 +15,7 @@ module.exports = {
     name: 'location',
     description: 'View info on current location, or change location',
     aliases: ['l'],
-    usage: '[-m -c -i -f]',
+    usage: '[-m or -c or -i or -f]',
     execute: (msg: Message, args: Array<string>) => {
         const id = msg.author.id
 
@@ -32,13 +32,13 @@ module.exports = {
                 // User exists, parse arguments to see what exactly to do next
                 const arg = args[0]
 
-                if (arg?.toLowerCase() === '-m' || arg?.toLowerCase() === '-c') {
+                if (['-m', '-c', '-move', '-change', '-t', '-travel'].includes(arg?.toLowerCase())) {
                     // Move/change to a new location(next arg is location name)
                     locationList[userData[0].location].travel(msg, args)
-                } else if (arg?.toLowerCase() === '-i' || !arg) {
+                } else if (['-i', '-info'].includes(arg?.toLowerCase()) || !arg) {
                     // Show info on location
                     locationList[userData[0].location].info(msg)
-                } else if (arg?.toLowerCase() === '-f') {
+                } else if (['-f', '-fight'].includes(arg?.toLowerCase())) {
                     // Fight at the current location
                     const location = locationList[userData[0].location]
 
