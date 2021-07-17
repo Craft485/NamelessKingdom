@@ -31,9 +31,6 @@ module.exports = {
             if (userData?.length > 0) {
                 const response = new MessageEmbed()
                 const infoItem = args[0]
-                
-                console.log(args)
-                console.log(infoItem)
 
                 if (!args || !args.length) {
                     // Show info on user
@@ -43,10 +40,8 @@ module.exports = {
                         `Current Health: ${userData[0].currentHealth}\n`)
                 } else if (infoItem) {
                     // Show info on an item/enemy
-                    console.log(Object.keys(itemList))
                     const isItem = Object.keys(itemList).find(itemName => itemName.toLowerCase() === infoItem.toLowerCase())
                     const isEnemy = Object.keys(enemyList).find(enemyName => enemyName.toLowerCase() === infoItem.toLowerCase())
-                    console.log(isItem)
                     // Yes there is a better way to achieve this
                     if (isItem) {
                         const item = itemList[infoItem.toLowerCase()]
