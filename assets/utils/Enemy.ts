@@ -14,6 +14,7 @@ interface enemyProps {
     name?: string,
     health?: number,
     attack?: number,
+    description?: string,
     drops?: Map<any, number>,
     specialAttack?: Function
 }
@@ -22,14 +23,18 @@ interface enemyProps {
 let currentBattles: Map<number, Array<enemyProps>> = new Map()
 
 class Enemy {
+    props: enemyProps
     name: string
     health: number
     attack: number
+    description: string
     drops?: Map<any, number>
     constructor(props: enemyProps) {
+        this.props = props
         this.name = props.name
         this.health = props.health
         this.attack = props.attack
+        this.description = props.description
         this.drops = props.drops
         this.beginRound = this.beginRound
     }
@@ -127,7 +132,7 @@ class Enemy {
 }
 
 // NOTE: new Map([[k, v], [k, v]])
-const goblin = new Enemy({ name: 'goblin', health: 10, attack: 2})
+const goblin = new Enemy({ name: 'goblin', health: 10, attack: 2, description: "Its just a goblin"})
 
 module.exports.enemyList = {
     goblin: goblin
