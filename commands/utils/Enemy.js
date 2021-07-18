@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = require("discord.js");
 const fs = require('fs');
+const _ = require('lodash');
 const config = require('../../config.json');
 const mysql = require('mysql');
 const con = mysql.createConnection({
@@ -40,7 +41,7 @@ class Enemy {
             }
             // Set battle data to be used in beginRound
             if (data?.length > 0) {
-                currentBattles.set(parseInt(id), [{ health: data[0].currentHealth, attack: data[0].attack }, this]);
+                currentBattles.set(parseInt(id), [{ health: data[0].currentHealth, attack: data[0].attack }, _.cloneDeep(this)]);
                 // Take the first turn of the battle
                 this.beginRound(msg);
             }
