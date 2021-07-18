@@ -15,7 +15,7 @@ const con = mysql.createConnection({
 });
 module.exports = {
     name: 'info',
-    description: '',
+    description: 'Get information about a player, item, or enemy',
     aliases: ['i'],
     usage: '[item name or enemy name]',
     execute: (msg, args) => {
@@ -28,13 +28,16 @@ module.exports = {
                 return msg.reply('an error occured');
             }
             if (userData?.length > 0) {
-                const response = new discord_js_1.MessageEmbed();
+                const response = new discord_js_1.MessageEmbed()
+                    .setColor("#808080");
                 const infoItem = args[0];
                 if (!args || !args.length) {
                     // Show info on user
                     response.setTitle(msg.author.username);
                     response.addField('Info', `Max Health: ${userData[0].maxHealth}\n` +
-                        `Current Health: ${userData[0].currentHealth}\n`);
+                        `Current Health: ${userData[0].currentHealth}\n` +
+                        `Current Item: ${userData[0].equippedItem}\n` +
+                        `Current Location: ${userData[0].location}`);
                 }
                 else if (infoItem) {
                     // Show info on an item/enemy

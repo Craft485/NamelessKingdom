@@ -14,7 +14,7 @@ const con = mysql.createConnection({
 
 module.exports = {
     name: 'info',
-    description: '',
+    description: 'Get information about a player, item, or enemy',
     aliases: ['i'],
     usage: '[item name or enemy name]',
     execute: (msg: Message, args: Array<string>) => {
@@ -30,6 +30,7 @@ module.exports = {
 
             if (userData?.length > 0) {
                 const response = new MessageEmbed()
+                    .setColor("#808080")
                 const infoItem = args[0]
 
                 if (!args || !args.length) {
@@ -37,7 +38,9 @@ module.exports = {
                     response.setTitle(msg.author.username)
                     response.addField('Info', 
                         `Max Health: ${userData[0].maxHealth}\n`+
-                        `Current Health: ${userData[0].currentHealth}\n`)
+                        `Current Health: ${userData[0].currentHealth}\n`+
+                        `Current Item: ${userData[0].equippedItem}\n`+
+                        `Current Location: ${userData[0].location}`)
                 } else if (infoItem) {
                     // Show info on an item/enemy
                     const isItem = Object.keys(itemList).find(itemName => itemName.toLowerCase() === infoItem.toLowerCase())
