@@ -1,6 +1,7 @@
 const { Client, Message, Collection } = require('discord.js')
 const { prefix } = require('./config.json')
 const { token } = require('./t.json')
+const { interval } = require('./utils/interval')
 const fs = require('fs')
 require('colors')
 
@@ -22,6 +23,8 @@ client.once("ready", () => {
     console.log(`Guild count: ${client.guilds.cache.size}`.magenta)
     setTimeout(() => { console.log(`Loaded ${loadedCommands.length} commands`.cyan) }, 500)
     console.log(`Ready!`.green)
+    // Update user values every 5 minutes
+    setInterval(interval, 300000)
 })
 
 /**
