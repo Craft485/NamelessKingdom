@@ -18,8 +18,6 @@ function interval() {
             fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flag: 'a' })
             console.error('Error updating users on interval')
         }
-
-        console.log('Users table has been updated')
     })
 }
 
