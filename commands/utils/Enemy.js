@@ -42,7 +42,7 @@ class Enemy {
             }
             // Set battle data to be used in beginRound
             if (data?.length > 0) {
-                currentBattles.set(parseInt(id), [{ health: data[0].currentHealth, attack: data[0].attack }, _.cloneDeep(this)]);
+                currentBattles.set(parseInt(id), [{ health: data[0].currentHealth, attack: data[0].attack }, _.cloneDeep(this), { roundNumber: 0 }]);
                 // Take the first turn of the battle
                 this.beginRound(msg);
             }
@@ -60,12 +60,13 @@ class Enemy {
             const battle = currentBattles.get(parseInt(id));
             const player = battle[0];
             const enemy = battle[1];
+            battle[2].roundNumber++;
             player.health -= enemy.attack;
             enemy.health -= player.attack;
             const response = new Discord.MessageEmbed({
                 color: config.colors.red,
                 fields: [{
-                        name: 'Battle Info',
+                        name: `Battle Info | Round ${battle[2].roundNumber}`,
                         value: "```diff\n" +
                             `- ${msg.author.username} took ${enemy.attack} damage\n` +
                             `- ${enemy.name} took ${player.attack} damage\n\n` +
@@ -152,7 +153,7 @@ class Enemy {
             }
             else {
                 // Make sure the battle info updates
-                currentBattles.set(parseInt(id), [{ health: player.health, attack: player.attack }, enemy]);
+                currentBattles.set(parseInt(id), [{ health: player.health, attack: player.attack }, enemy, { roundNumber: battle[2].roundNumber }]);
                 return msg.channel.send({ embeds: [response] });
             }
         }
