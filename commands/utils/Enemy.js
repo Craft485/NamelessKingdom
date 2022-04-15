@@ -60,13 +60,14 @@ class Enemy {
             const battle = currentBattles.get(parseInt(id));
             const player = battle[0];
             const enemy = battle[1];
+            const previousRoundMessage = battle[2].roundNumber > 0 ? battle[2].msg : null;
             battle[2].roundNumber++;
             player.health -= enemy.attack;
             enemy.health -= player.attack;
             const response = new Discord.MessageEmbed({
                 color: config.colors.red,
                 fields: [{
-                        name: `Battle Info | Round ${battle[2].roundNumber}`,
+                        name: `Battle Info | ${msg.author.username} V.S. ${enemy.name} | Round ${battle[2].roundNumber}`,
                         value: "```diff\n" +
                             `- ${msg.author.username} took ${enemy.attack} damage\n` +
                             `- ${enemy.name} took ${player.attack} damage\n\n` +
@@ -149,12 +150,32 @@ class Enemy {
                     }
                 });
                 currentBattles.delete(parseInt(id));
-                return msg.channel.send({ embeds: [response] });
+                previousRoundMessage ? previousRoundMessage.edit({ embeds: [response] }) : msg.channel.send({ embeds: [response] });
+                msg.delete();
+                return;
             }
             else {
                 // Make sure the battle info updates
-                currentBattles.set(parseInt(id), [{ health: player.health, attack: player.attack }, enemy, { roundNumber: battle[2].roundNumber }]);
-                return msg.channel.send({ embeds: [response] });
+                // I'm aware this is a complete mess all to acheive a very simple concept
+                // Literally the only difference is if we call Message#send or Message#edit
+                previousRoundMessage
+                    ? previousRoundMessage.edit({ embeds: [response] }).then(message => {
+                        currentBattles.set(parseInt(id), [
+                            { health: player.health, attack: player.attack },
+                            enemy,
+                            { roundNumber: battle[2].roundNumber, msg: message }
+                        ]);
+                    })
+                    : msg.channel.send({ embeds: [response] }).then(message => {
+                        currentBattles.set(parseInt(id), [
+                            { health: player.health, attack: player.attack },
+                            enemy,
+                            { roundNumber: battle[2].roundNumber, msg: message }
+                        ]);
+                    });
+                // Prevent clogging up channel
+                msg.delete();
+                return;
             }
         }
     }
