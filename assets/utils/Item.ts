@@ -13,17 +13,20 @@ const con = mysql.createConnection({
 interface itemProps {
     name: string,
     description: string,
-    attack?: number
+    attack?: number,
+    value?: number
 }
 
 class Item {
     name: string
     description: string
     attack?: number
+    value?: number
     constructor (props: itemProps) {
         this.name = props.name
         this.description = props.description
         this.attack = props.attack || 0
+        this.value = props.value
     }
 
     info (msg: Discord.Message) {
@@ -45,7 +48,8 @@ class Item {
 }
 
 const stick = new Item({ name: 'stick', description: 'A pointy stick, perhaps not a great weapon but its a start.', attack: 2 })
+const basic_sword = new Item({ name: 'Basic Sword', description: 'A little flimsy, but sharp enough to get the job done.', attack: 3 })
 
 module.exports.itemList = {
-    stick: stick
+    stick: stick, basic_sword: basic_sword
 }
