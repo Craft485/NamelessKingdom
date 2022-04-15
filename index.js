@@ -1,11 +1,11 @@
-const { Client, Message, Collection } = require('discord.js')
+const { Client, Message, Collection, Intents } = require('discord.js')
 const { prefix } = require('./config.json')
 const { token } = require('./t.json')
 const { interval } = require('./utils/interval')
 const fs = require('fs')
 require('colors')
 
-const client = new Client()
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
 client.commands = new Collection()
 
 // Load commands
@@ -30,17 +30,15 @@ client.once("ready", () => {
 /**
  * @param {Message} msg
  */
-client.on('message', (msg) => {
+client.on("message", (msg) => {
     // Don't reply to self or other bots, or if the message isn't a command
     if (msg.author.bot || !msg.content.startsWith(prefix)) return
-
     const args = msg.content.slice(prefix.length).trim().split(' ')
     const commandName = args.shift().toLowerCase()
 
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))
 
     if (!command) return
-
     if (command.args && !args.length) return msg.reply(`Incorrect arguments provided.\n\n\`${prefix}${command.name} ${command.usage ? command.usage : ''}\``)
 
     try {
