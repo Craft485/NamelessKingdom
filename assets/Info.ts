@@ -23,14 +23,13 @@ module.exports = {
         // Check for user in database
         con.query('SELECT * FROM users WHERE id = ?;', [id], (err: Error, userData: any[]) => {
             if (err) {
-                fs.writeFileSync('../logs/ERR.log', `\n\n${err}`, { flags: "a" })
+                fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" })
                 console.error('Error selecting from users\n', err)
-                return msg.reply('an error occured')
+                return msg.reply('An error occured')
             }
 
             if (userData?.length > 0) {
-                const response = new MessageEmbed()
-                    .setColor("#808080")
+                const response = new MessageEmbed({ color: "#808080" })
                 const infoItem = args[0]
 
                 if (!args || !args.length) {
@@ -57,13 +56,13 @@ module.exports = {
                             `${enemy.description}\n\n` +
                             `placeholder`)
                     } else {
-                        return msg.reply('unknown argument given')
+                        return msg.reply('Unknown argument given')
                     }
                 }
 
-                return msg.channel.send(response)
+                return msg.channel.send({ embeds: [response] })
             } else {
-                return msg.reply(`we couldn't find you in the databse, have you used ${config.prefix}start yet?`)
+                return msg.reply(`We couldn't find you in the databse, have you used ${config.prefix}start yet?`)
             }
         })
     }

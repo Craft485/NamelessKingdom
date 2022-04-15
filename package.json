@@ -17,7 +17,7 @@
   "homepage": "https://github.com/Craft485/NamelessKingdom",
   "dependencies": {
     "colors": "^1.4.0",
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.6.0",
     "fs": "*",
     "lodash": "^4.17.21",
     "mysql": "^2.18.1"

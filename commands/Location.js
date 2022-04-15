@@ -20,13 +20,13 @@ module.exports = {
         const id = msg.author.id;
         con.query('SELECT * FROM users WHERE id = ?;', [id], (err, userData) => {
             if (err) {
-                fs.writeFileSync('../logs/ERR.log', `\n\n${err}`, { flags: "a" });
+                fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" });
                 console.error('Error selecting from users\n', err);
-                return msg.reply('an error occured');
+                return msg.reply('An error occured');
             }
             // console.log(userData)
             if (!userData || userData.length <= 0) {
-                return msg.reply(`we couldn\'t find you in the database, have you used ${config.prefix}start yet?`);
+                return msg.reply(`We couldn\'t find you in the database, have you used ${config.prefix}start yet?`);
             }
             else {
                 // User exists, parse arguments to see what exactly to do next
@@ -46,7 +46,7 @@ module.exports = {
                         return location.enemyList[Math.floor(location.enemyList.length * Math.random())].beginBattle(msg);
                     }
                     else {
-                        return msg.reply('there is nothing to fight here.');
+                        return msg.reply('There is nothing to fight here.');
                     }
                 }
             }

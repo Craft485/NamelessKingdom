@@ -19,10 +19,10 @@ for (const commandFile of commandFiles) {
 }
 
 client.once("ready", () => {
-    console.log(`Logged in as ${client.user.username} | User ID: ${client.user.id}`.cyan)
-    console.log(`Guild count: ${client.guilds.cache.size}`.magenta)
-    setTimeout(() => { console.log(`Loaded ${loadedCommands.length} commands`.cyan) }, 500)
-    console.log(`Ready!`.green)
+    console.info(`Logged in as ${client.user.username} | User ID: ${client.user.id}`.cyan)
+    console.info(`Guild count: ${client.guilds.cache.size}`.magenta)
+    setTimeout(() => { console.info(`Loaded ${loadedCommands.length} commands`.cyan) }, 500)
+    console.info(`Ready!`.green)
     // Update user values every 5 minutes
     setInterval(interval, 300000)
 })
@@ -30,7 +30,7 @@ client.once("ready", () => {
 /**
  * @param {Message} msg
  */
-client.on("message", (msg) => {
+client.on("messageCreate", (msg) => {
     // Don't reply to self or other bots, or if the message isn't a command
     if (msg.author.bot || !msg.content.startsWith(prefix)) return
     const args = msg.content.slice(prefix.length).trim().split(' ')
@@ -46,7 +46,7 @@ client.on("message", (msg) => {
     } catch (err) {
         console.error(`ERR: ${err}`.red)
         msg.channel.send('An error occured while trying to execute that command, this event has been logged')
-        fs.writeFileSync('../logs/ERR.log', `\n\n${err}`, { flag: 'a' })
+        fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flag: 'a' })
     }
 })
 

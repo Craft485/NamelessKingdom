@@ -45,16 +45,26 @@ class Location {
         let data: string = ''
         for (const [direction, location] of Object.entries(this.neighbors)) if (location) data += `\t#Travel [${direction}] to arrive at [${location}].\n`
 
-        const response = new Discord.MessageEmbed()
-            .setColor(config.colors.green)
-            .addField(this.name, 
-                '```css\n' +
+        const response = new Discord.MessageEmbed({
+            color: config.colors.green,
+            fields: [{
+                name: this.name,
+                value: '```css\n' +
                 '{}@Neighboring-Locations{}\n' +
                 data +
-                '```')
-            .setFooter(this.description)
+                '```'
+            }],
+            footer: { text: this.description }
+        })
+            // .setColor(config.colors.green)
+            // .addField(this.name, 
+            //     '```css\n' +
+            //     '{}@Neighboring-Locations{}\n' +
+            //     data +
+            //     '```')
+            // .setFooter(this.description)
 
-        return msg.channel.send(response)
+        return msg.channel.send({ embeds: [response] })
     }
 
     /**
@@ -68,7 +78,7 @@ class Location {
             if (err) {
                 // fs.writeFileSync('../../logs/ERR.log', `\n\n${err}`, { flags: "a" })
                 console.error('Error selecting from users\n', err)
-                return msg.reply('an error occured')
+                return msg.reply('An error occured')
             }
 
             if (userData?.length > 0) {
@@ -83,17 +93,17 @@ class Location {
                 if (finalDestination) {
                     con.query('UPDATE users SET location = ? WHERE id = ?;', [finalDestination, id], (err: Error) => {
                         if (err) {
-                            fs.writeFileSync('../logs/ERR.log', `\n\n${err}`, { flags: "a" })
+                            fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" })
                             console.error('Error updating users\n', err)
-                            return msg.reply('an error occured')
+                            return msg.reply('An error occured')
                         }
-                        return msg.reply(`you make your way to ${finalDestination} and arrive safely, but dangers still lurk all around you.`)
+                        return msg.reply(`You make your way to ${finalDestination} and arrive safely, but dangers still lurk all around you.`)
                     })
                 } else {
-                    return msg.reply('an error occured')
+                    return msg.reply('An error occured')
                 }
             } else {
-                return msg.reply(`we couldn't find you in the database. Have you used ${config.prefix}start yet?`)
+                return msg.reply(`We couldn't find you in the database. Have you used ${config.prefix}start yet?`)
             }
         })
     }

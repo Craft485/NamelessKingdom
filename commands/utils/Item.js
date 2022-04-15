@@ -26,7 +26,7 @@ class Item {
             if (err) {
                 fs.writeFileSync('../../logs/ERR.log', `\n\n${err}`, { flags: "a" });
                 console.error('Error updating users\n', err);
-                return msg.reply('an error occured');
+                return msg.reply('An error occured');
             }
             return msg.channel.send(`${msg.author.username} equipped ${this.name}`);
         });

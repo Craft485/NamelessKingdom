@@ -38,7 +38,7 @@ class Enemy {
             if (err) {
                 fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" });
                 console.error('Error selecting from users\n', err);
-                return msg.reply('an error occured');
+                return msg.reply('An error occured');
             }
             // Set battle data to be used in beginRound
             if (data?.length > 0) {
@@ -47,7 +47,7 @@ class Enemy {
                 this.beginRound(msg);
             }
             else {
-                return msg.reply(`could not locate ${msg.author.username} in database, have you used ${config.prefix}start yet?`);
+                return msg.reply(`Could not locate ${msg.author.username} in database, have you used ${config.prefix}start yet?`);
             }
         });
     }
@@ -62,14 +62,18 @@ class Enemy {
             const enemy = battle[1];
             player.health -= enemy.attack;
             enemy.health -= player.attack;
-            const response = new Discord.MessageEmbed()
-                .setColor(config.colors.red)
-                .addField('Battle Info', "```diff\n" +
-                `- ${msg.author.username} took ${enemy.attack} damage\n` +
-                `- ${enemy.name} took ${player.attack} damage\n\n` +
-                `+ ${msg.author.username} has ${player.health} health left\n` +
-                `+ ${enemy.name} has ${enemy.health} health left\n` +
-                "```");
+            const response = new Discord.MessageEmbed({
+                color: config.colors.red,
+                fields: [{
+                        name: 'Battle Info',
+                        value: "```diff\n" +
+                            `- ${msg.author.username} took ${enemy.attack} damage\n` +
+                            `- ${enemy.name} took ${player.attack} damage\n\n` +
+                            `+ ${msg.author.username} has ${player.health} health left\n` +
+                            `+ ${enemy.name} has ${enemy.health} health left\n` +
+                            "```"
+                    }]
+            });
             if (player.health <= 0 || enemy.health <= 0) {
                 // End battle
                 let dropData = [];
@@ -117,11 +121,10 @@ class Enemy {
                             if (err) {
                                 fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" });
                                 console.error('Error occured adding items to inventory after a combat(SELECT statement)\n', err);
-                                return msg.reply('an error occured');
+                                return msg.reply('An error occured');
                             }
                             // FIXME: This doesn't TRULY take into account the drop of multiple of the same item which could be a case in the future
                             // We have no logic currently(nor items for that matter) that drops more than 1 of an item, minus gold but thats dealt with elsewhere
-                            console.log(results);
                             const q = results?.length > 0
                                 ? `UPDATE inventory SET quantity = quantity + ${droppedItemCount} WHERE id = ${id} AND name = "${droppedItemName}";`
                                 : `INSERT INTO inventory (id, name, quantity) VALUES (${id}, "${droppedItemName}", ${droppedItemCount});`;
@@ -129,7 +132,7 @@ class Enemy {
                                 if (err) {
                                     fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" });
                                     console.error('Error occured adding items to inventory after a combat(UPSERT statement)\n', err);
-                                    return msg.reply('an error occured');
+                                    return msg.reply('An error occured');
                                 }
                             });
                         });
@@ -141,16 +144,16 @@ class Enemy {
                     if (err) {
                         fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" });
                         console.error('Error updating users\n', err);
-                        return msg.reply('an error occured');
+                        return msg.reply('An error occured');
                     }
                 });
                 currentBattles.delete(parseInt(id));
-                return msg.channel.send(response);
+                return msg.channel.send({ embeds: [response] });
             }
             else {
                 // Make sure the battle info updates
                 currentBattles.set(parseInt(id), [{ health: player.health, attack: player.attack }, enemy]);
-                return msg.channel.send(response);
+                return msg.channel.send({ embeds: [response] });
             }
         }
     }

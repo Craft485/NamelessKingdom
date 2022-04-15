@@ -20,11 +20,11 @@ module.exports = {
         const id = msg.author.id;
         con.query('SELECT * FROM users WHERE id = ?;', [id], (err, userData) => {
             if (err) {
-                fs.writeFileSync('../logs/ERR.log', `\n\n${err}`, { flags: "a" });
+                fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" });
                 console.error('Error selecting from users\n', err);
-                return msg.reply('an error occured');
+                return msg.reply('An error occured');
             }
-            userData?.length > 0 ? locationList[userData[0].location].travel(msg, args) : msg.reply(`you don't appear in the database. Have you used ${config.prefix}start yet?`);
+            userData?.length > 0 ? locationList[userData[0].location].travel(msg, args) : msg.reply(`You don't appear in the database. Have you used ${config.prefix}start yet?`);
         });
     }
 };

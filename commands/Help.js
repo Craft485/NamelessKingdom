@@ -15,12 +15,13 @@ module.exports = {
         if (!args.length) {
             const commandList = commands.map(command => `${command.name} | ${command.description}`);
             commandList.forEach(commandInfo => { data.push(commandInfo); });
-            const response = new discord_js_1.MessageEmbed()
-                .setColor(config.colors.green)
-                .setTitle('Here\'s a list of my available commands')
-                .addField('=====', data.join('\n'))
-                .setFooter(`Use ${config.prefix}[command name] for more information on a specific command`);
-            return msg.channel.send(response);
+            const response = new discord_js_1.MessageEmbed({
+                color: config.colors.green,
+                title: 'Here\'s a list of my available commands',
+                fields: [{ name: '=====', value: data.join('\n') }],
+                footer: { text: `Use ${config.prefix}[command name] for more information on a specific command` }
+            });
+            return msg.channel.send({ embeds: [response] });
         }
         // Show info on a specific command
         const name = args[0].toLowerCase();
@@ -34,9 +35,10 @@ module.exports = {
             data.push(`**Description:** ${command.description}`);
         if (command.usage)
             data.push(`**Usage:** ${config.prefix}${command.name} ${command.usage}`);
-        const response = new discord_js_1.MessageEmbed()
-            .setColor(config.colors.green)
-            .addField('=====', data.join('\n'));
-        return msg.channel.send(response);
+        const response = new discord_js_1.MessageEmbed({
+            color: config.colors.green,
+            fields: [{ name: '=====', value: data.join('\n') }]
+        });
+        return msg.channel.send({ embeds: [response] });
     }
 };
