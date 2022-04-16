@@ -20,7 +20,7 @@ module.exports = {
                 color: config.colors.green,
                 title: 'Here\'s a list of my available commands',
                 fields: [ { name: '=====', value: data.join('\n') } ],
-                footer: { text: `Use ${config.prefix}[command name] for more information on a specific command` }
+                footer: { text: `Use ${config.prefix}help [command name] for more information on a specific command` }
             })
             return msg.channel.send({ embeds: [response] })
         }

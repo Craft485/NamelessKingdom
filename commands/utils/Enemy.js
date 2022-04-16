@@ -97,8 +97,10 @@ class Enemy {
                                     // Range math
                                     droppedItemCount = Math.floor(Math.random() * (max - min + 1)) + min;
                                 }
-                                data += `${droppedItemCount} **${entry[0]}**\n`;
-                                dropData.push(`${droppedItemCount} ${entry[0]}`);
+                                if (droppedItemCount > 0) {
+                                    data += `${droppedItemCount} **${entry[0]}**\n`;
+                                    dropData.push(`${droppedItemCount} ${entry[0]}`);
+                                }
                             }
                             return data;
                         }
@@ -125,8 +127,6 @@ class Enemy {
                                 console.error('Error occured adding items to inventory after a combat(SELECT statement)\n', err);
                                 return msg.reply('An error occured');
                             }
-                            // FIXME: This doesn't TRULY take into account the drop of multiple of the same item which could be a case in the future
-                            // We have no logic currently(nor items for that matter) that drops more than 1 of an item, minus gold but thats dealt with elsewhere
                             const q = results?.length > 0
                                 ? `UPDATE inventory SET quantity = quantity + ${droppedItemCount} WHERE id = ${id} AND name = "${droppedItemName}";`
                                 : `INSERT INTO inventory (id, name, quantity) VALUES (${id}, "${droppedItemName}", ${droppedItemCount});`;
@@ -182,8 +182,8 @@ class Enemy {
 }
 // NOTE: new Map([[k, v], [k, v]])
 // @ts-ignore
-const goblin = new Enemy({ name: 'goblin', health: 10, attack: 2, description: "Its just a goblin", drops: new Map([['gold', { min: 1, max: 5 }], [itemList['basic_sword'].name, 1]]) });
-// const wolf = new Enemy({ name: 'wolf', health: 15, attack: 3, description: 'Not a very good boy', drops: new Map([['gold', 1]])})
+const goblin = new Enemy({ name: 'goblin', health: 10, attack: 2, description: "Its just a goblin", drops: new Map([['gold', { min: 1, max: 5 }], [itemList['basic_sword'].name, { min: 0, max: 1 }]]) });
+// const wolf = new Enemy({ name: 'wolf', health: 15, attack: 3, description: 'Not a very good boy', drops: new Map([['gold', { min: 2, max: 6 }]])})
 module.exports.enemyList = {
     goblin: goblin //, wolf: wolf
 };

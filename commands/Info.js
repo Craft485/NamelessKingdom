@@ -29,14 +29,15 @@ module.exports = {
             }
             if (userData?.length > 0) {
                 const response = new discord_js_1.MessageEmbed({ color: "#808080" });
-                const infoItem = args[0];
+                const infoItem = args?.join(' ');
                 if (!args || !args.length) {
                     // Show info on user
                     response.setTitle(msg.author.username);
                     response.addField('Info', `Max Health: ${userData[0].maxHealth}\n` +
                         `Current Health: ${userData[0].currentHealth}\n` +
                         `Current Item: ${userData[0].equippedItem}\n` +
-                        `Current Location: ${userData[0].location}`);
+                        `Current Location: ${userData[0].location}\n` +
+                        `Gold: ${userData[0].gold}`);
                 }
                 else if (infoItem) {
                     // Show info on an item/enemy
