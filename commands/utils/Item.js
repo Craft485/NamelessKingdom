@@ -24,7 +24,7 @@ class Item {
         const id = parseInt(msg.author.id);
         con.query('UPDATE users SET equippedItem = ? WHERE id = ?;', [this.name, id], (err) => {
             if (err) {
-                fs.writeFileSync('../../logs/ERR.log', `\n\n${err}`, { flags: "a" });
+                fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" });
                 console.error('Error updating users\n', err);
                 return msg.reply('An error occured');
             }

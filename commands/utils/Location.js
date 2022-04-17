@@ -44,13 +44,6 @@ class Location {
                 }],
             footer: { text: this.description }
         });
-        // .setColor(config.colors.green)
-        // .addField(this.name, 
-        //     '```css\n' +
-        //     '{}@Neighboring-Locations{}\n' +
-        //     data +
-        //     '```')
-        // .setFooter(this.description)
         return msg.channel.send({ embeds: [response] });
     }
     /**
@@ -61,7 +54,7 @@ class Location {
         // Check for user existing
         con.query('SELECT * FROM users WHERE id = ?;', [id], (err, userData) => {
             if (err) {
-                // fs.writeFileSync('../../logs/ERR.log', `\n\n${err}`, { flags: "a" })
+                fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" });
                 console.error('Error selecting from users\n', err);
                 return msg.reply('An error occured');
             }
