@@ -30,7 +30,7 @@ module.exports = {
 
             if (userData?.length > 0) {
                 const response = new MessageEmbed({ color: "#808080" })
-                const infoItem = args?.join(' ')
+                const infoItem: string = args?.join(' ').toLowerCase().split(' ').map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')
 
                 if (!args || !args.length) {
                     // Show info on user
@@ -43,18 +43,16 @@ module.exports = {
                         `Gold: ${userData[0].gold}`)
                 } else if (infoItem) {
                     // Show info on an item/enemy
-                    const isItem = Object.keys(itemList).find(itemName => itemName.toLowerCase() === infoItem.toLowerCase())
-                    const isEnemy = Object.keys(enemyList).find(enemyName => enemyName.toLowerCase() === infoItem.toLowerCase())
-                    // Yes there is a better way to achieve this
-                    if (isItem) {
-                        const item = itemList[infoItem.toLowerCase()]
-                        response.addField(item.name, 
-                            `${item.description}\n\n` +
-                            `Attack: ${item.attack || 'N/A'}`)
-                    } else if (isEnemy) {
-                        const enemy = enemyList[infoItem.toLowerCase()]
-                        response.addField(enemy.name,
-                            `${enemy.description}\n\n` +
+                    const validItem: any = Object.values(itemList).find((item: any) => item.name.toLowerCase() === infoItem.toLowerCase())
+                    const validEnemy: any = Object.values(enemyList).find((enemy: any) => enemy.name.toLowerCase() === infoItem.toLowerCase())
+                    
+                    if (validItem) {
+                        response.addField(validItem.name, 
+                            `${validItem.description}\n\n` +
+                            `Attack: ${validItem.attack || 'N/A'}`)
+                    } else if (validEnemy) {
+                        response.addField(validEnemy.name,
+                            `${validEnemy.description}\n\n` +
                             `placeholder`)
                     } else {
                         return msg.reply('Unknown argument given')
