@@ -40,12 +40,13 @@ module.exports = {
                         `Current Health: ${userData[0].currentHealth}\n`+
                         `Current Item: ${userData[0].equippedItem}\n`+
                         `Current Location: ${userData[0].location}\n`+
-                        `Gold: ${userData[0].gold}`)
+                        `Gold: ${userData[0].gold}\n`+
+                        `Current Level: ${userData[0].level}`)
                 } else if (infoItem) {
                     // Show info on an item/enemy
                     const validItem: any = Object.values(itemList).find((item: any) => item.name.toLowerCase() === infoItem.toLowerCase())
                     const validEnemy: any = Object.values(enemyList).find((enemy: any) => enemy.name.toLowerCase() === infoItem.toLowerCase())
-                    
+
                     if (validItem) {
                         response.addField(validItem.name, 
                             `${validItem.description}\n\n` +
