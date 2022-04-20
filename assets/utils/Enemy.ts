@@ -73,6 +73,7 @@ class Enemy {
         const id = msg.author.id
 
         if (currentBattles.has(parseInt(id))) {
+            // battle[0] holds player data, battle[1] holds enemy data, battle[2] holds general data for the combat
             const battle = currentBattles.get(parseInt(id))
 
             const player = battle[0]
@@ -108,15 +109,18 @@ class Enemy {
                         if (entries) {
                             for (let i = 0; i < currentBattles.get(parseInt(id))[1].drops.size; i++) {
                                 const entry: Array<any> = entries.next().value
-                                // The number of a certain item dropped is either defined as a single number or a range in the form { min: #, max: # }
+                                // The number of a certain item dropped is either defined as a single number or a range in the form { min?: #, max?: #, chance?: # }
                                 let droppedItemCount: any = entry[1]
                                 if (typeof droppedItemCount === 'object') {
                                     // https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range/1527820#1527820
-                                    // We know min and max to be whole numbers, but rounding them just in case
-                                    const min: number = Math.ceil(droppedItemCount.min)
-                                    const max: number = Math.floor(droppedItemCount.max)
-                                    // Range math
-                                    droppedItemCount = Math.floor(Math.random() * (max - min + 1)) + min
+                                    // We know min and max to be whole numbers, chance is a float
+                                    // typeof droppedItemCount.min === 'number' ? droppedItemCount.min : droppedItemCount.chance
+                                    const min: number = droppedItemCount.min || null 
+                                    // typeof droppedItemCount.max === 'number' ? droppedItemCount.max : droppedItemCount.chance
+                                    const max: number = droppedItemCount.max || null 
+                                    // Drop chance/range logic
+                                    const chance = droppedItemCount.chance || null
+                                    chance ? droppedItemCount = ( Math.random() <= chance ? 1 : 0 ) : droppedItemCount = Math.floor(Math.random() * (max - min + 1)) + min
                                 }
                                 if (droppedItemCount > 0) {
                                     data += `${droppedItemCount} **${entry[0]}**\n`
@@ -182,7 +186,7 @@ class Enemy {
             } else {
                 // Make sure the battle info updates
                 // I'm aware this is a complete mess all to acheive a very simple concept
-                // Literally the only difference is if we call Message#send or Message#edit
+                // Literally the only difference is if we call Message#send() or Message#edit()
                 previousRoundMessage 
                 ? previousRoundMessage.edit({ embeds: [response] }).then(message => {
                     currentBattles.set(parseInt(id), [
@@ -207,8 +211,8 @@ class Enemy {
 }
 
 // NOTE: new Map([[k, v], [k, v]])
-// @ts-ignore
-const goblin = new Enemy({ name: 'goblin', health: 10, attack: 2, description: "Its just a goblin", drops: new Map([['gold', { min: 1, max: 5 }], [itemList['basic_sword'].name, { min: 0, max: 1 }]])})
+// @ts-ignore I'll be honest, I don't know what my linter is trying to tell me but it still compiles and runs so it probably fine...
+const goblin = new Enemy({ name: 'goblin', health: 10, attack: 2, description: "Its just a goblin", drops: new Map([['gold', { min: 1, max: 5 }], [itemList['basic_sword'].name, { chance: 0.25 }]])})
 // const wolf = new Enemy({ name: 'wolf', health: 15, attack: 3, description: 'Not a very good boy', drops: new Map([['gold', { min: 2, max: 6 }]])})
 
 module.exports.enemyList = {

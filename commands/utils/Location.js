@@ -33,6 +33,7 @@ class Location {
         for (const [direction, location] of Object.entries(this.neighbors))
             if (location)
                 data += `\t#Travel [${direction}] to arrive at [${location}].\n`;
+        // TODO: Add more information about the location here, perhaps the kinds of enemies to be found and the shops around
         const response = new Discord.MessageEmbed({
             color: config.colors.green,
             fields: [{
