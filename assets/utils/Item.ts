@@ -47,9 +47,17 @@ class Item {
     }
 }
 
+/** @deprecated Keeping this for future reference, however it should not be used anywhere */
 const stick = new Item({ name: 'stick', description: 'A pointy stick, perhaps not a great weapon but its a start.', attack: [2, 3] })
+/** @deprecated Keeping this for future reference, however it should not be used anywhere */
 const basic_sword = new Item({ name: 'Basic Sword', description: 'A little flimsy, but sharp enough to get the job done.', attack: [3, 4] })
 
-module.exports.itemList = {
-    stick: stick, basic_sword: basic_sword
-}
+// Load items from JSON file
+const itemList = {}
+const itemJSONList = require('../../items.json')
+Object.keys(itemJSONList).forEach((key: string) => {
+    const itemTemplate = itemJSONList[key]
+    itemList[key] = new Item({ name: key, description: itemTemplate.description, attack: itemTemplate.attack })
+})
+
+module.exports.itemList = itemList

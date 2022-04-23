@@ -87,8 +87,20 @@ class Location {
         });
     }
 }
-const knossos = new Location({ name: 'Knossos', description: 'placeholder', neighbors: ['Mycenae'], enemyList: [enemyList.goblin] });
-const Mycenae = new Location({ name: 'Mycenae', description: 'placeholder', neighbors: [null, null, 'Knossos'], enemyList: [enemyList.goblin] });
-module.exports.locationList = {
-    Knossos: knossos, Mycenae: Mycenae
-};
+/** @deprecated Keeping this for future reference, however it should not be used anywhere */
+const knossos = new Location({ name: 'Knossos', description: 'placeholder', neighbors: ['Mycenae'], enemyList: [enemyList.Goblin] });
+/** @deprecated Keeping this for future reference, however it should not be used anywhere */
+const Mycenae = new Location({ name: 'Mycenae', description: 'placeholder', neighbors: [null, null, 'Knossos'], enemyList: [enemyList.Goblin] });
+// Load locations from JSON file
+const locationList = {};
+const locationJSONList = require('../../locations.json');
+Object.keys(locationJSONList).forEach((key) => {
+    const locationTemplate = locationJSONList[key];
+    // locationTemplate#enemyList is defined as Array<string>, we need to generate an Array<Enemy> based off of it
+    const locationEnemyList = [];
+    locationTemplate.enemyList.forEach((enemyName) => {
+        locationEnemyList.push(Object.values(enemyList).find((e) => e.name === enemyName));
+    });
+    locationList[key] = new Location({ name: key, description: locationTemplate.description, neighbors: locationTemplate.neighbors, enemyList: locationEnemyList || [] });
+});
+module.exports.locationList = locationList;

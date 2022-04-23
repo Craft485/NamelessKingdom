@@ -107,10 +107,9 @@ class Enemy {
                     ? `The ${enemy.name} has won, you crawl away, defeated, but will live to fight another day.` 
                     : `The ${enemy.name} lays dead at your feet.\n${(function (): string {
                         let data: string = ''
-                        let entries = currentBattles.get(parseInt(id))[1].drops?.entries()
+                        let entries = currentBattles.get(parseInt(id))[1].drops
                         if (entries) {
-                            for (let i = 0; i < currentBattles.get(parseInt(id))[1].drops.size; i++) {
-                                const entry: Array<any> = entries.next().value
+                            entries.forEach((entry: Array<any>) => {
                                 // The number of a certain item dropped is either defined as a single number or a range in the form { min?: #, max?: #, chance?: # }
                                 let droppedItemCount: any = entry[1]
                                 if (typeof droppedItemCount === 'object') {
@@ -128,7 +127,8 @@ class Enemy {
                                     data += `${droppedItemCount} **${entry[0]}**\n`
                                     dropData.push(`${droppedItemCount} ${entry[0]}`)
                                 }
-                            }
+                            })
+                            
                             return data
                         }
                         return ' '
@@ -213,10 +213,25 @@ class Enemy {
 }
 
 // NOTE: new Map([[k, v], [k, v]])
+/** @deprecated Keeping this for future reference, however it should not be used anywhere */
 // @ts-ignore I'll be honest, I don't know what my linter is trying to tell me but it still compiles and runs so it probably fine...
-const goblin = new Enemy({ name: 'goblin', health: 10, attack: [1, 2], description: "Its just a goblin", drops: new Map([['gold', { min: 1, max: 5 }], [itemList['basic_sword'].name, { chance: 0.25 }]])})
-// const wolf = new Enemy({ name: 'wolf', health: 15, attack: 3, description: 'Not a very good boy', drops: new Map([['gold', { min: 2, max: 6 }]])})
+const goblin = new Enemy({ 
+    name: 'goblin', 
+    health: 10, 
+    attack: [1, 2], 
+    description: "A very angry, green, stabby man, might want to keep your distance", 
+    drops: new Map([
+        ['gold', { min: 1, max: 5 }], 
+        [itemList['Basic Sword'].name, { chance: 0.25 }]
+    ])
+})
 
-module.exports.enemyList = {
-    goblin: goblin//, wolf: wolf
-}
+// Load enemies from JSON file
+const enemyList = {}
+const enemyJSONList = require('../../enemies.json')
+Object.keys(enemyJSONList).forEach((key: string) => {
+    const enemyTemplate = enemyJSONList[key]
+    enemyList[key] = new Enemy({ name: key, health: enemyTemplate.health, attack: enemyTemplate.attack, description: enemyTemplate.description, drops: enemyTemplate.drops })
+})
+
+module.exports.enemyList = enemyList

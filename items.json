@@ -1,0 +1,10 @@
+{
+    "stick": {
+        "description": "A pointy stick, perhaps not a great weapon but its a start.",
+        "attack": [2, 3]
+    },
+    "Basic Sword": {
+        "description": "A little flimsy, but sharp enough to get the job done.",
+        "attack": [3, 4]
+    }
+}

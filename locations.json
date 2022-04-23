@@ -1,0 +1,12 @@
+{
+    "Knossos": {
+        "description": "placeholder",
+        "neighbors": ["Mycenae"],
+        "enemyList": ["Goblin"]
+    },
+    "Mycenae": {
+        "description": "placeholder",
+        "neighbors": [null, null, "Knossos"],
+        "enemyList": ["Goblin"]
+    }
+}

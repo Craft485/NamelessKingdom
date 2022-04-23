@@ -1,0 +1,19 @@
+{
+    "Goblin": {
+        "health": 10,
+        "attack": [2, 3],
+        "description": "Its just a goblin",
+        "drops": [
+            ["gold", { "min": 1, "max": 5 }],
+            ["basic sword", { "chance": 0.25 }]
+        ]
+    },
+    "Wolf": {
+        "health": 15,
+        "attack": [2, 4],
+        "description": "Not a very good boy",
+        "drops": [
+            ["gold", { "min": 2, "max": 5 }]
+        ]
+    }
+}
