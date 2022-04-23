@@ -28,7 +28,7 @@ module.exports = {
             }
             // User is new, add to db
             if (!data || !data.length) {
-                con.query('INSERT INTO users (id, name, attack, equippedItem) VALUES(?, ?, ?, \'stick\'); INSERT INTO inventory (id, name) VALUES (?, "stick")', [id, msg.author.username, itemList.stick.attack, id], (err) => {
+                con.query('INSERT INTO users (id, name, attack, equippedItem) VALUES(?, ?, ?, \'stick\'); INSERT INTO inventory (id, name) VALUES (?, "stick")', [id, msg.author.username, JSON.stringify(itemList.stick.attack), id], (err) => {
                     if (err) {
                         fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" });
                         console.error('Error adding new user\n', err);

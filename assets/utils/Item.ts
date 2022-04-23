@@ -13,19 +13,19 @@ const con = mysql.createConnection({
 interface itemProps {
     name: string,
     description: string,
-    attack?: number,
+    attack?: Array<number>,
     value?: number
 }
 
 class Item {
     name: string
     description: string
-    attack?: number
+    attack?: Array<number>
     value?: number
     constructor (props: itemProps) {
         this.name = props.name
         this.description = props.description
-        this.attack = props.attack || 0
+        this.attack = props.attack || null
         this.value = props.value
     }
 
@@ -34,21 +34,21 @@ class Item {
     }
 
     equip (msg: Discord.Message) {
-        const id = parseInt(msg.author.id)
+        const id = msg.author.id
 
-        con.query('UPDATE users SET equippedItem = ? WHERE id = ?;', [this.name, id], (err: Error) => {
+        con.query('UPDATE users SET equippedItem = ?, attack = ? WHERE id = ?;', [this.name, JSON.stringify(this.attack), id], (err: Error, res) => {
             if (err) {
                 fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" })
                 console.error('Error updating users\n', err)
                 return msg.reply('An error occured')
             }
-            return msg.channel.send(`${msg.author.username} equipped ${this.name}`)
+            return msg.reply(`You equipped \`${this.name}\`, careful with that thing!`)
         })
     }
 }
 
-const stick = new Item({ name: 'stick', description: 'A pointy stick, perhaps not a great weapon but its a start.', attack: 2 })
-const basic_sword = new Item({ name: 'Basic Sword', description: 'A little flimsy, but sharp enough to get the job done.', attack: 3 })
+const stick = new Item({ name: 'stick', description: 'A pointy stick, perhaps not a great weapon but its a start.', attack: [2, 3] })
+const basic_sword = new Item({ name: 'Basic Sword', description: 'A little flimsy, but sharp enough to get the job done.', attack: [3, 4] })
 
 module.exports.itemList = {
     stick: stick, basic_sword: basic_sword

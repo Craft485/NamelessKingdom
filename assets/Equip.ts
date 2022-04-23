@@ -31,15 +31,7 @@ module.exports = {
                     console.error('Error selecting from users(Equip SELECT)\n', err)
                     return msg.reply('An error occured')
                 } else if (res?.length > 0 && validItem?.attack) {
-                    if (!validItem?.attack) return msg.reply('How are you going to kill anything with __THAT__?')
-                    con.query('UPDATE users SET equippedItem = ?, attack = ? WHERE id = ?;', [itemToEquip, validItem.attack, id], (err: Error) => {
-                        if (err) {
-                            fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" })
-                            console.error('Error updating from users(Equip UPDATE)\n', err)
-                            return msg.reply('An error occured')
-                        }
-                        return msg.reply(`You equipped \`${itemToEquip}\`, careful with that thing!`)
-                    })
+                    return validItem?.attack?.length === 0 || validItem?.attack[0] === 0 ? msg.reply('How are you going to kill anything with __THAT__?') : validItem.equip(msg)
                 } else {
                     return msg.reply(`Unknown user, have you used ${config.prefix}start yet?`)
                 }

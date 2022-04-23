@@ -15,7 +15,7 @@ const con = mysql.createConnection({
 interface enemyProps {
     name?: string,
     health?: number,
-    attack?: number,
+    attack?: Array<number>,
     description?: string,
     drops?: Map<any, any>,
     specialAttack?: Function
@@ -28,7 +28,7 @@ class Enemy {
     props: enemyProps
     name: string
     health: number
-    attack: number
+    attack: Array<number>
     description: string
     drops?: Map<any, any>
     constructor(props: enemyProps) {
@@ -57,7 +57,7 @@ class Enemy {
             }
             // Set battle data to be used in beginRound
             if (data?.length > 0) {
-                currentBattles.set(parseInt(id), [{ health: data[0].currentHealth, attack: data[0].attack }, _.cloneDeep(this), { roundNumber: 0 }])
+                currentBattles.set(parseInt(id), [{ health: data[0].currentHealth, attack: JSON.parse(data[0].attack) }, _.cloneDeep(this), { roundNumber: 0 }])
                 // Take the first turn of the battle
                 this.beginRound(msg)
             } else {
@@ -81,16 +81,18 @@ class Enemy {
             const previousRoundMessage: null | Discord.Message = battle[2].roundNumber > 0 ? battle[2].msg : null
             battle[2].roundNumber++
 
-            player.health -= enemy.attack
-            enemy.health -= player.attack
+            const damageDealtToPlayer: number = Math.floor(Math.random() * (enemy.attack[1] - enemy.attack[0] + 1)) + enemy.attack[0]
+            const damageDealtToEnemy: number = Math.floor(Math.random() * (player.attack[1] - player.attack[0] + 1)) + player.attack[0]
+            player.health -= damageDealtToPlayer
+            enemy.health -= damageDealtToEnemy
 
             const response = new Discord.MessageEmbed({
                 color: config.colors.red,
                 fields: [{
                     name: `Battle Info | ${msg.author.username} V.S. ${enemy.name} | Round ${battle[2].roundNumber}`,
                     value: "```diff\n" + 
-                    `- ${msg.author.username} took ${enemy.attack} damage\n` +
-                    `- ${enemy.name} took ${player.attack} damage\n\n` +
+                    `- ${msg.author.username} took ${damageDealtToPlayer} damage\n` +
+                    `- ${enemy.name} took ${damageDealtToEnemy} damage\n\n` +
                     `+ ${msg.author.username} has ${player.health} health left\n` +
                     `+ ${enemy.name} has ${enemy.health} health left\n` + 
                     "```"
@@ -212,7 +214,7 @@ class Enemy {
 
 // NOTE: new Map([[k, v], [k, v]])
 // @ts-ignore I'll be honest, I don't know what my linter is trying to tell me but it still compiles and runs so it probably fine...
-const goblin = new Enemy({ name: 'goblin', health: 10, attack: 2, description: "Its just a goblin", drops: new Map([['gold', { min: 1, max: 5 }], [itemList['basic_sword'].name, { chance: 0.25 }]])})
+const goblin = new Enemy({ name: 'goblin', health: 10, attack: [1, 2], description: "Its just a goblin", drops: new Map([['gold', { min: 1, max: 5 }], [itemList['basic_sword'].name, { chance: 0.25 }]])})
 // const wolf = new Enemy({ name: 'wolf', health: 15, attack: 3, description: 'Not a very good boy', drops: new Map([['gold', { min: 2, max: 6 }]])})
 
 module.exports.enemyList = {
