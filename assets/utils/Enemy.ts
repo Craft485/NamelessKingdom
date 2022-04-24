@@ -46,9 +46,7 @@ class Enemy {
      */
     beginBattle (msg: Discord.Message) {
         const id = msg.author.id
-        // If we are already in a battle then continue it
-        if (currentBattles.has(parseInt(id))) return this.beginRound(msg)
-        // Get user info if they aren't currently in a battle
+        // Get user info to send to this#beginRound()
         con.query('SELECT * FROM users WHERE id = ?;', [id], (err: Error, data: Array<any>) => {
             if (err) {
                 fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" })
@@ -56,10 +54,12 @@ class Enemy {
                 return msg.reply('An error occured')
             }
             // Set battle data to be used in beginRound
+            // If we are already in a battle then continue it
+            if (currentBattles.has(parseInt(id))) return this.beginRound(msg, data[0])
             if (data?.length > 0) {
                 currentBattles.set(parseInt(id), [{ health: data[0].currentHealth, attack: JSON.parse(data[0].attack) }, _.cloneDeep(this), { roundNumber: 0 }])
                 // Take the first turn of the battle
-                this.beginRound(msg)
+                this.beginRound(msg, data[0])
             } else {
                 return msg.reply(`Could not locate ${msg.author.username} in database, have you used ${config.prefix}start yet?`)
             }
@@ -69,7 +69,7 @@ class Enemy {
     /**
      * Take a full turn during a fight
      */
-    beginRound (msg: Discord.Message): Promise<Discord.Message> | void {
+    beginRound (msg: Discord.Message, currentUserData: any): Promise<Discord.Message> | void {
         const id = msg.author.id
 
         if (currentBattles.has(parseInt(id))) {
@@ -134,10 +134,10 @@ class Enemy {
                         return ' '
                     }())}`
                 }`)
-                
+
                 // Go through each item that was dropped at add it to the database, update quantity if needed
                 // %G is a placeholder for if we need to also update gold count somewhere in the for-each loop
-                let userTableQuery: string = `UPDATE users SET currentHealth = ${player.health <= 0 ? 1 : player.health}%G WHERE id = ${id};`
+                let userTableQuery: string = `UPDATE users SET currentHealth = ${player.health <= 0 ? 1 : player.health}%G%E WHERE id = ${id};`
                 dropData.forEach(droppedItem => {
                     droppedItem = droppedItem.trim()
                     // Yay for repeated use of the same variable name for constants
@@ -146,6 +146,10 @@ class Enemy {
                     let droppedItemName = droppedItemData.join(' ')
                     if (droppedItemName.toUpperCase() === 'GOLD') {
                         userTableQuery = userTableQuery.replace('%G', `, gold = gold + ${droppedItemCount}`)
+                    } else if (droppedItemName.toLowerCase() === 'experience') {
+                        // Add experience to userTableQuery, calculate level,  update user level
+                        const level = parseInt(currentUserData.level) + Math.floor(Math.sqrt(Math.floor(parseInt(currentUserData.exp) + parseInt(droppedItemCount))) / 42)
+                        userTableQuery = userTableQuery.replace('%E', `, exp = exp + ${droppedItemCount}, level = ${level}`)                        
                     } else {
                         // A poor mans version of an UPSERT statement
                         // We MUST use string interpolation here for droppedItemName, I'm not sure why
@@ -171,13 +175,14 @@ class Enemy {
                     }
                 })
                 if (userTableQuery.includes('%G')) userTableQuery = userTableQuery.replace('%G', '')
+                if(userTableQuery.includes('%E')) userTableQuery = userTableQuery.replace('%E', '')
                 
                 con.query(userTableQuery, [player.health <= 0 ? 1 : player.health, id], (err: Error) => {
                     if (err) {
                         fs.writeFileSync('./logs/ERR.log', `\n\n${err}`, { flags: "a" })
                         console.error('Error updating users\n', err)
                         return msg.reply('An error occured')
-                    }        
+                    }
                 })
 
                 currentBattles.delete(parseInt(id))
