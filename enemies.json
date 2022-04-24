@@ -5,7 +5,7 @@
         "description": "Its just a goblin",
         "drops": [
             ["gold", { "min": 1, "max": 5 }],
-            ["experience", { "min": 10, "max": 15 }],
+            ["experience", { "min": 2, "max": 5 }],
             ["basic sword", { "chance": 0.25 }]
         ]
     },
@@ -15,7 +15,7 @@
         "description": "Not a very good boy",
         "drops": [
             ["gold", { "min": 2, "max": 5 }],
-            ["experience", { "min": 10, "max": 20 }]
+            ["experience", { "min": 3, "max": 6 }]
         ]
     }
 }

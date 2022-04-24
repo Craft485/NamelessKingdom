@@ -148,8 +148,9 @@ class Enemy {
                         userTableQuery = userTableQuery.replace('%G', `, gold = gold + ${droppedItemCount}`)
                     } else if (droppedItemName.toLowerCase() === 'experience') {
                         // Add experience to userTableQuery, calculate level,  update user level
-                        const level = parseInt(currentUserData.level) + Math.floor(Math.sqrt(Math.floor(parseInt(currentUserData.exp) + parseInt(droppedItemCount))) / 42)
-                        userTableQuery = userTableQuery.replace('%E', `, exp = exp + ${droppedItemCount}, level = ${level}`)                        
+                        const level = parseInt(currentUserData.level) + Math.floor(Math.sqrt(Math.floor(parseInt(currentUserData.exp) + parseInt(droppedItemCount))) / 10.5)
+                        userTableQuery = userTableQuery.replace('%E', `, exp = exp + ${droppedItemCount}, level = ${level}`)
+                        if (level > parseInt(currentUserData.level)) response.addField('--------------------------', "```asciidoc\n" + `=== Level Up! ===\n[ Reached Level ${level} ]\n` + "```")
                     } else {
                         // A poor mans version of an UPSERT statement
                         // We MUST use string interpolation here for droppedItemName, I'm not sure why
