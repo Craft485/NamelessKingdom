@@ -25,8 +25,7 @@ module.exports = {
                 console.error('Error selecting from users\n', err)
                 return msg.reply('An error occured')
             }
-
-            userData?.length > 0 ? locationList[userData[0].location].travel(msg, args) : msg.reply(`You don't appear in the database. Have you used ${config.prefix}start yet?`)
+            userData?.length > 0 ? locationList[userData[0].location.replace(/\s/, '-')].travel(msg, args) : msg.reply(`You don't appear in the database. Have you used ${config.prefix}start yet?`)
         })
     }
 }

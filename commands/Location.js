@@ -33,15 +33,15 @@ module.exports = {
                 const arg = args[0];
                 if (['-m', '-c', '-move', '-change', '-t', '-travel'].includes(arg?.toLowerCase())) {
                     // Move/change to a new location(next arg is location name)
-                    locationList[userData[0].location].travel(msg, args);
+                    locationList[userData[0].location.replace(/\s/, '-')].travel(msg, args);
                 }
                 else if (['-i', '-info'].includes(arg?.toLowerCase()) || !arg) {
                     // Show info on location
-                    locationList[userData[0].location].info(msg);
+                    locationList[userData[0].location.replace(/\s/, '-')].info(msg);
                 }
                 else if (['-f', '-fight'].includes(arg?.toLowerCase())) {
                     // Fight at the current location
-                    const location = locationList[userData[0].location];
+                    const location = locationList[userData[0].location.replace(/\s/, '-')];
                     if (location.enemyList?.length > 0) {
                         return location.enemyList[Math.floor(location.enemyList.length * Math.random())].beginBattle(msg);
                     }

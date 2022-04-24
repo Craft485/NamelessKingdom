@@ -6,7 +6,17 @@
     },
     "Mycenae": {
         "description": "placeholder",
-        "neighbors": [null, null, "Knossos"],
+        "neighbors": [null, "Lignum", "Knossos"],
         "enemyList": ["Goblin"]
+    },
+    "Lignum": {
+        "description": "placeholder",
+        "neighbors": [null, "Eastern Wilderness", null, "Mycenae"],
+        "enemyList": ["Goblin", "Wolf"]
+    },
+    "Eastern-Wilderness": {
+        "description": "placeholder",
+        "neighbors": [null, null, null, "Lignum"],
+        "enemyList": ["Goblin", "Wolf"]
     }
 }

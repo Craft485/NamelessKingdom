@@ -70,7 +70,7 @@ class Enemy {
             const response = new Discord.MessageEmbed({
                 color: config.colors.red,
                 fields: [{
-                        name: `Battle Info | ${msg.author.username} V.S. ${enemy.name} | Round ${battle[2].roundNumber}`,
+                        name: `${currentUserData.location} | ${msg.author.username} V.S. ${enemy.name} | Round ${battle[2].roundNumber}`,
                         value: "```diff\n" +
                             `- ${msg.author.username} took ${damageDealtToPlayer} damage\n` +
                             `- ${enemy.name} took ${damageDealtToEnemy} damage\n\n` +
@@ -125,7 +125,7 @@ class Enemy {
                     }
                     else if (droppedItemName.toLowerCase() === 'experience') {
                         // Add experience to userTableQuery, calculate level,  update user level
-                        const level = parseInt(currentUserData.level) + Math.floor(Math.sqrt(Math.floor(parseInt(currentUserData.exp) + parseInt(droppedItemCount))) / 10.5);
+                        const level = Math.floor(Math.sqrt(Math.floor(parseInt(currentUserData.exp) + parseInt(droppedItemCount))) / 10.5);
                         userTableQuery = userTableQuery.replace('%E', `, exp = exp + ${droppedItemCount}, level = ${level}`);
                         if (level > parseInt(currentUserData.level))
                             response.addField('--------------------------', "```asciidoc\n" + `=== Level Up! ===\n[ Reached Level ${level} ]\n` + "```");

@@ -27,7 +27,7 @@ module.exports = {
             if (!res || res?.length === 0)
                 return msg.reply(`Unknown user, have you used ${config.prefix}start yet?`);
             // Uses the same logic as '-location -fight'
-            const location = locationList[res[0].location];
+            const location = locationList[res[0].location.replace(/\s/, '-')];
             if (location.enemyList?.length > 0) {
                 return location.enemyList[Math.floor(location.enemyList.length * Math.random())].beginBattle(msg);
             }
