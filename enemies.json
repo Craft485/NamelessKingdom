@@ -4,9 +4,9 @@
         "attack": [2, 3],
         "description": "Its just a goblin",
         "drops": [
-            ["gold", { "min": 1, "max": 5 }],
-            ["experience", { "min": 2, "max": 5 }],
-            ["basic sword", { "chance": 0.25 }]
+            ["Gold", { "min": 1, "max": 5 }],
+            ["Experience", { "min": 2, "max": 5 }],
+            ["Basic Sword", { "chance": 0.25 }]
         ]
     },
     "Wolf": {
@@ -14,8 +14,9 @@
         "attack": [2, 4],
         "description": "Not a very good boy",
         "drops": [
-            ["gold", { "min": 2, "max": 5 }],
-            ["experience", { "min": 3, "max": 6 }]
+            ["Gold", { "min": 2, "max": 5 }],
+            ["Experience", { "min": 3, "max": 6 }],
+            ["Pelt", { "min": 0, "max": 2 }]
         ]
     }
 }

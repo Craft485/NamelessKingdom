@@ -6,5 +6,9 @@
     "Basic Sword": {
         "description": "A little flimsy, but sharp enough to get the job done.",
         "attack": [3, 4]
+    },
+    "Pelt": {
+        "description": "A fur pelt from a wild beast.",
+        "value": 5
     }
 }

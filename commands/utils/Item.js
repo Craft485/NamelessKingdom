@@ -41,6 +41,6 @@ const itemList = {};
 const itemJSONList = require('../../items.json');
 Object.keys(itemJSONList).forEach((key) => {
     const itemTemplate = itemJSONList[key];
-    itemList[key] = new Item({ name: key, description: itemTemplate.description, attack: itemTemplate.attack });
+    itemList[key] = new Item({ name: key, description: itemTemplate.description, attack: itemTemplate.attack || null, value: itemTemplate.value || null });
 });
 module.exports.itemList = itemList;
