@@ -1,0 +1,6 @@
+[
+    { "type": "Armored", "value": [ { "attribute": "health", "value": 3 } ] },
+    { "type": "Strong", "value": [ { "attribute": "attack", "value": 2 } ] },
+    { "type": "Rich", "value": [ { "attribute": "gold", "value": 3 } ] },
+    { "type": "Pale", "value": [ { "attribute": "gold", "value": 4 }, { "attribute": "attack", "value": 2 }, { "attribute": "health", "value": 4 } ] }
+]

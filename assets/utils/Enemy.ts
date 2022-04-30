@@ -1,7 +1,6 @@
 import * as Discord from 'discord.js'
 const fs = require('fs')
 const _ = require('lodash')
-const { itemList } = require('./Item')
 const config = require('../../config.json')
 const mysql = require('mysql')
 const con = mysql.createConnection({
@@ -11,13 +10,22 @@ const con = mysql.createConnection({
     password: config.sql.password,
     database: config.sql.database
 })
+type Varient = {
+    type: string,
+    value: Array<{ attribute: string, value: number | Array<number> }>
+}
+let varients: Array<Varient>
+fs.readFile('./enemy.varients.json', { encoding: 'utf-8' }, (err: Error, data: string) => {
+    if (err) throw err;
+    varients = JSON.parse(data)
+})
 
 interface enemyProps {
     name?: string,
     health?: number,
     attack?: Array<number>,
     description?: string,
-    drops?: Map<any, any>,
+    drops?: Array<Array<string | { min?: number, max?: number, chance?: number }>>,
     specialAttack?: Function
 }
 
@@ -30,7 +38,7 @@ class Enemy {
     health: number
     attack: Array<number>
     description: string
-    drops?: Map<any, any>
+    drops?: Array<Array<string | { min?: number, max?: number, chance?: number }>>
     constructor(props: enemyProps) {
         this.props = props
         this.name = props.name
@@ -57,7 +65,8 @@ class Enemy {
             // If we are already in a battle then continue it
             if (currentBattles.has(parseInt(id))) return this.beginRound(msg, data[0])
             if (data?.length > 0) {
-                currentBattles.set(parseInt(id), [{ health: data[0].currentHealth, attack: JSON.parse(data[0].attack) }, _.cloneDeep(this), { roundNumber: 0 }])
+                const varient = varients[Math.floor(Math.random() * varients.length)]
+                currentBattles.set(parseInt(id), [{ health: data[0].currentHealth, attack: JSON.parse(data[0].attack) }, _.cloneDeep(this), { roundNumber: 0, varient: varient }])
                 // Take the first turn of the battle
                 this.beginRound(msg, data[0])
             } else {
@@ -75,9 +84,10 @@ class Enemy {
         if (currentBattles.has(parseInt(id))) {
             // battle[0] holds player data, battle[1] holds enemy data, battle[2] holds general data for the combat
             const battle = currentBattles.get(parseInt(id))
+            const varient: Varient = battle[2].varient
 
             const player = battle[0]
-            const enemy = battle[1]
+            const enemy: Enemy = battle[1]
             const previousRoundMessage: null | Discord.Message = battle[2].roundNumber > 0 ? battle[2].msg : null
             battle[2].roundNumber++
 
@@ -217,20 +227,6 @@ class Enemy {
         }
     }
 }
-
-// NOTE: new Map([[k, v], [k, v]])
-/** @deprecated Keeping this for future reference, however it should not be used anywhere */
-// @ts-ignore I'll be honest, I don't know what my linter is trying to tell me but it still compiles and runs so it probably fine...
-const goblin = new Enemy({ 
-    name: 'goblin', 
-    health: 10, 
-    attack: [1, 2], 
-    description: "A very angry, green, stabby man, might want to keep your distance", 
-    drops: new Map([
-        ['gold', { min: 1, max: 5 }], 
-        [itemList['Basic Sword'].name, { chance: 0.25 }]
-    ])
-})
 
 // Load enemies from JSON file
 const enemyList = {}
