@@ -69,6 +69,30 @@ class Enemy {
             const player = battle[0];
             const enemy = battle[1];
             const previousRoundMessage = battle[2].roundNumber > 0 ? battle[2].msg : null;
+            // If its the very first round, deal with varient attribute changes
+            if (battle[2].roundNumber === 0) {
+                varient.value.forEach((attributeType) => {
+                    const attrName = attributeType.attribute;
+                    const drop = enemy.drops.find((d) => d[0].toLowerCase() === attrName.toLowerCase());
+                    const dropIndex = enemy.drops.findIndex((d) => d[0].toLowerCase() === attrName.toLowerCase());
+                    if (enemy[attrName]) {
+                        if (enemy[attrName] instanceof Array) {
+                            enemy[attrName] = enemy[attrName].map((x) => x + JSON.parse(attributeType.value));
+                        }
+                        else {
+                            enemy[attrName] += JSON.parse(attributeType.value);
+                        }
+                    }
+                    else {
+                        if (drop) {
+                            enemy.drops[dropIndex] = [enemy.drops[dropIndex][0], { min: enemy.drops[dropIndex][1].min + JSON.parse(attributeType.value), max: enemy.drops[dropIndex][1].max + JSON.parse(attributeType.value) }];
+                        }
+                        else {
+                            console.error(`Could not alter enemy attribute ${attrName} for varient ${varient.type} on enemy ${this.name}`);
+                        }
+                    }
+                });
+            }
             battle[2].roundNumber++;
             const damageDealtToPlayer = Math.floor(Math.random() * (enemy.attack[1] - enemy.attack[0] + 1)) + enemy.attack[0];
             const damageDealtToEnemy = Math.floor(Math.random() * (player.attack[1] - player.attack[0] + 1)) + player.attack[0];
@@ -77,7 +101,7 @@ class Enemy {
             const response = new Discord.MessageEmbed({
                 color: config.colors.red,
                 fields: [{
-                        name: `${currentUserData.location} | ${msg.author.username} V.S. ${enemy.name} | Round ${battle[2].roundNumber}`,
+                        name: `${currentUserData.location} | ${msg.author.username} V.S.${varient.type.length ? " **" + varient.type + "**" : ""} ${enemy.name} | Round ${battle[2].roundNumber}`,
                         value: "```diff\n" +
                             `- ${msg.author.username} took ${damageDealtToPlayer} damage\n` +
                             `- ${enemy.name} took ${damageDealtToEnemy} damage\n\n` +
@@ -184,14 +208,14 @@ class Enemy {
                         currentBattles.set(parseInt(id), [
                             { health: player.health, attack: player.attack },
                             enemy,
-                            { roundNumber: battle[2].roundNumber, msg: message }
+                            { roundNumber: battle[2].roundNumber, varient: varient, msg: message }
                         ]);
                     })
                     : msg.channel.send({ embeds: [response] }).then(message => {
                         currentBattles.set(parseInt(id), [
                             { health: player.health, attack: player.attack },
                             enemy,
-                            { roundNumber: battle[2].roundNumber, msg: message }
+                            { roundNumber: battle[2].roundNumber, varient: varient, msg: message }
                         ]);
                     });
                 // Prevent clogging up channel
