@@ -27,6 +27,8 @@ module.exports = {
             }
 
             if (!res || res?.length === 0) return msg.reply(`Unknown user, have you used ${config.prefix}start yet?`)
+            // Do we have the energy to fight?
+            if (res[0].currentHealth <= 5) return msg.reply('You lack the energy to do much of anything at the moment, rest a bit and try again later')
             // Uses the same logic as '-location -fight'
             const location = locationList[res[0].location.replace(/\s/, '-')]
 

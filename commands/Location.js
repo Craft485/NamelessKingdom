@@ -40,6 +40,9 @@ module.exports = {
                     locationList[userData[0].location.replace(/\s/, '-')].info(msg);
                 }
                 else if (['-f', '-fight'].includes(arg?.toLowerCase())) {
+                    // Do we have the energy to fight?
+                    if (userData[0].currentHealth <= 5)
+                        return msg.reply('You lack the energy to do much of anything at the moment, rest a bit and try again later');
                     // Fight at the current location
                     const location = locationList[userData[0].location.replace(/\s/, '-')];
                     if (location.enemyList?.length > 0) {
